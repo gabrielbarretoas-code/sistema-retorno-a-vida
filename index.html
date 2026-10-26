@@ -2,6 +2,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=670e7fd9-e41b-4c6a-a470-8810016e4de0
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Sistema Retorno à Vida</title>
 <style>
@@ -25,7 +28,7 @@ body.dark{--bg:#0f1420;--card:#1a2130;--ink:#e8ecf4;--ink2:#9aa4ba;--line:#2a334
 .nav button.on{background:rgba(255,255,255,.16);color:#fff;font-weight:600}
 .nav .ic{font-size:17px;width:22px;text-align:center}
 .sidefoot{padding:12px 18px;border-top:1px solid rgba(255,255,255,.15);font-size:10.5px;opacity:.7}
-.main{flex:1;margin-left:230px;padding:20px 24px 90px;max-width:860px}
+.main{flex:1;margin-left:230px;padding:18px 30px 90px;max-width:none}
 .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .topbar h2{font-size:21px;font-weight:800}
 .topbar .sub{font-size:12px;color:var(--ink2);margin-top:2px}
@@ -46,6 +49,9 @@ body.dark{--bg:#0f1420;--card:#1a2130;--ink:#e8ecf4;--ink2:#9aa4ba;--line:#2a334
 .card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px}
 .card h3 .tag{margin-left:auto}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:900px){.grid3{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.grid3{grid-template-columns:1fr}}
 @media(max-width:640px){.grid2{grid-template-columns:1fr}}
 .hero{background:linear-gradient(135deg,var(--azul),var(--azul2));color:#fff;border:none;border-radius:16px;padding:20px;margin-bottom:14px}
 .hero .lbl{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;opacity:.8}
@@ -118,6 +124,50 @@ body.dark .insight .ilbl{color:#d4b34a}
 .mbox input:focus,.mbox select:focus,.mbox textarea:focus{outline:none;border-color:var(--azul2)}
 .mrow{display:flex;gap:8px;margin-top:16px}
 .mrow .btn{flex:1}
+
+/* ===== v6: gráficos ===== */
+.grafico{margin-top:10px}
+.donut-wrap{display:flex;align-items:center;gap:14px}
+.donut{--p:0;width:84px;height:84px;border-radius:50%;background:conic-gradient(var(--azul2) calc(var(--p)*1%), rgba(127,127,127,.18) 0);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.donut i{width:58px;height:58px;border-radius:50%;background:var(--card,#fff);display:flex;flex-direction:column;align-items:center;justify-content:center;font-style:normal}
+.donut b{font-size:16px;line-height:1}
+.donut small{font-size:9px;opacity:.7}
+.barras{display:flex;align-items:flex-end;gap:10px;height:110px;padding:0 4px;border-bottom:1px solid rgba(127,127,127,.25)}
+.barras .b{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.barras .col{width:100%;max-width:56px;border-radius:6px 6px 0 0;background:var(--azul2)}
+.barras .col.neg{background:#b3261e}
+.barras .lbl{font-size:10.5px;opacity:.75;white-space:nowrap}
+.barras .val{font-size:10.5px;font-weight:700}
+.anel-dia{display:flex;align-items:center;gap:12px}
+.mini{--p:0;width:64px;height:64px;border-radius:50%;background:conic-gradient(#1b6e3c calc(var(--p)*1%), rgba(127,127,127,.18) 0);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mini i{width:44px;height:44px;border-radius:50%;background:var(--card,#fff);display:flex;flex-direction:column;align-items:center;justify-content:center;font-style:normal}
+.mini b{font-size:13px}
+.mini small{font-size:8.5px;opacity:.7}
+
+/* ===== GRAFICOS v5.2 ===== */
+.donut{width:150px;height:150px;border-radius:50%;background:conic-gradient(var(--azul2) 0deg, var(--azul2) var(--a), #e8e6e0 var(--a), #e8e6e0 360deg);display:flex;align-items:center;justify-content:center;margin:0 auto}
+.donut::before{content:'';position:absolute;width:106px;height:106px;border-radius:50%;background:var(--card)}
+.donut span{position:relative;z-index:1;font-weight:800;font-size:20px;color:var(--ink)}
+.grafbox{margin-top:10px}
+.barras{display:flex;align-items:flex-end;gap:6px;height:90px;padding:8px 4px 0}
+.barra-v{flex:1;background:var(--verde);border-radius:6px 6px 0 0;min-height:4px;position:relative}
+.barra-v.neg{background:var(--verm)}
+.barra-v .bv{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:9.5px;font-weight:700;color:var(--ink2);white-space:nowrap}
+.barra-lbl{text-align:center;font-size:10px;color:var(--ink2);margin-top:3px}
+
+/* ===== GRÁFICOS v5.2 ===== */
+.gwrap{display:flex;gap:14px;align-items:center}
+.anel{width:92px;height:92px;flex:none;position:relative}
+.anel svg{width:100%;height:100%;transform:rotate(-90deg)}
+.anel .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px}
+.gbars{display:flex;align-items:flex-end;gap:8px;height:110px;padding:6px 2px 0}
+.gbar{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.gbar .cols{display:flex;gap:3px;align-items:flex-end;width:100%;justify-content:center;height:86px}
+.gbar .c{width:16px;border-radius:4px 4px 0 0}
+.gbar .dia{font-size:10px;color:var(--ink2)}
+.gbar .leg{font-size:9.5px;color:var(--ink2);display:flex;gap:8px;margin-top:2px}
+.gleg{display:flex;gap:10px;font-size:11px;color:var(--ink2);margin-top:6px}
+.gdot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 </style>
 </head>
 <body>
@@ -143,7 +193,7 @@ body.dark .insight .ilbl{color:#d4b34a}
 <script>
 /* ================= CLOUD (Maestro injeta via OneDrive) ================= */
 const CLOUD = {
-  v: 2,
+  v: 9,
   principios: [
     {n:"Deus", d:"Primeiro de tudo. A rotina protege o tempo com Deus — nada invade o bloco 05:30–09:00."},
     {n:"Família", d:"Rosiane e as 3 filhas. Decisões passam por: isso protege minha família?"},
@@ -164,20 +214,46 @@ const CLOUD = {
     {id:1, t:"Camilo: enviar posicionamento com data + valor do próximo pagamento", tipo:"mensagem", area:"financeiro", p:"P0", prazo:"27/10", status:"aberta", resp:"Gabriel", dev:"Mensagem pronta pelo Maestro — só copiar e enviar"},
     {id:2, t:"Lote semanal de posicionamento p/ credores (Maestro monta, Gabriel envia)", tipo:"tarefa", area:"financeiro", p:"P0", prazo:"27/10", status:"aberta", resp:"Maestro", recorrencia:"semanal", dev:"Rodando — mensagens prontas a cada segunda. Recorrente: volta toda segunda."},
     {id:3, t:"CRECI-SP: confirmar diploma TTI + digitalizar 6 documentos", tipo:"tarefa", area:"trabalho", p:"P1", prazo:"31/10", status:"aberta", resp:"Gabriel", dev:"Roteiro PDF no OneDrive (pasta CRECI). Diploma define a rota"},
-    {id:4, t:"PROSCI Fase 2: roteiro Diretora Global (Maestro entrega)", tipo:"tarefa", area:"trabalho", p:"P1", prazo:"29/10", status:"aberta", resp:"Maestro", dev:"Fase 1 ok (Liliane). Próx: Diretora Global 29/10, pitch 06/11, início 09/11"},
+    {id:4, t:"PROSCI Fase 2: roteiro Diretora Global (Maestro entrega)", tipo:"tarefa", area:"trabalho", p:"P1", prazo:"29/10", status:"aberta", resp:"Maestro", dev:"Fase 1 ok (Liliane, 23/10). Compromissos: Diretora Global 29/10 · Pitch final 06/11 · Início 09/11. Roteiro Fase 2 em produção"},
     {id:5, t:"BR Supply/Miguel: cobrar andamento da homologação (R$ 440k)", tipo:"mensagem", area:"financeiro", p:"P1", prazo:"31/10", status:"aberta", resp:"Gabriel", recorrencia:"semanal", dev:"Maior alavanca de caixa — cobrança semanal amigável. Cada 'feito' registra o evento e agenda a próxima cobrança."},
     {id:6, t:"Serpa: sem retorno → acionar Miroel (advogado alternativo)", tipo:"ligacao", area:"juridico", p:"P1", prazo:"30/10", status:"aberta", resp:"Gabriel", dev:"Gatilho: se Serpa não respondeu, Miroel é o próximo"},
     {id:7, t:"CEDAE/Melina: follow-up vendas + novas participações", tipo:"mensagem", area:"trabalho", p:"P2", prazo:"31/10", status:"aberta", resp:"Gabriel", dev:"Pipeline médio — manter aquecido"},
     {id:8, t:"Marketplace: reativar anúncios (bebedouros, ar-cond, TV)", tipo:"tarefa", area:"financeiro", p:"P2", prazo:"01/11", status:"aberta", resp:"Maestro", dev:"Reescrever anúncios + precificação"},
     {id:9, t:"SONG: estratégia do financiamento atrasado (risco busca e apreensão)", tipo:"pesquisa", area:"juridico", p:"P2", prazo:"09/11", status:"aberta", resp:"Maestro", dev:"Mapear renegociação vs venda antes da busca"},
-    {id:10, t:"Adriano: caminhão em garantia — estrutura de solução", tipo:"pesquisa", area:"juridico", p:"P2", prazo:"09/11", status:"aberta", resp:"Maestro", dev:"Negociação banco + comprador intermediário"}
+    {id:10, t:"Adriano: caminhão em garantia — estrutura de solução", tipo:"pesquisa", area:"juridico", p:"P2", prazo:"09/11", status:"aberta", resp:"Maestro", dev:"Negociação banco + comprador intermediário"},
+    {id:11, t:"FINANCEIRO: conciliação concluída (saldo real R$ 14.539,54)", tipo:"tarefa", area:"financeiro", p:"P0", prazo:"27/10", status:"aberta", resp:"Gabriel", dev:"Ajuste de conciliação aplicado (−1 centavo): saldo R$ 14.539,54 = SALDO REAL confirmado pelo Gabriel. Marco zero do financeiro. Ao voltar: adaptações no app de lançamentos"}
   ],
   financeiro: {
-    saldo: 16003.91,
+    saldo: 14539.54,
     lancs: [
-      {d:"23/10", t:"Pix Luiz Eduardo (frete marketplace)", v:-100.00, cat:"frete"},
-      {d:"23/10", t:"Recarga Revolut (Pro Adapta Maestro)", v:-300.00, cat:"ferramenta"},
-      {d:"22/10", t:"Saldo âncora conferido (R$ 37.849,90 − 12 pagamentos)", v:0, cat:"base"}
+      {d:"26/10", t:"Otávio — pagamento (via app)", v:-250.00, cat:"pagamento"},
+      {d:"26/10", t:"AJUSTE DE CONCILIAÇÃO (−1 centavo, marco zero)", v:-0.01, cat:"ajuste"},
+      {d:"26/10", t:"Prime Lar Comércio e Serviços — Pix", v:-46.00, cat:"pagamento"},
+      {d:"25/10", t:"Facebook Serviços Online do Brasil — Pix", v:-150.00, cat:"marketing"},
+      {d:"24/10", t:"Gabriel Barreto Aquino (auto-transferência)", v:-445.00, cat:"transferência"},
+      {d:"24/10", t:"Gilcimar Rosa Da Conceicao — Pix", v:-62.00, cat:"pagamento"},
+      {d:"23/10", t:"Luiz Eduardo Neves da Silva Santos — Pix (2º)", v:-60.00, cat:"pagamento"},
+      {d:"23/10", t:"Gabriel Barreto Aquino (outra conta) — Pix", v:-300.00, cat:"transferência"},
+      {d:"23/10", t:"Luiz Eduardo Neves da Silva Santos — PIX", v:-100.00, cat:"pagamento"},
+      {d:"23/10", t:"Recarga Revolut — pacote Pro Adapta Maestro", v:-300.00, cat:"ferramenta"},
+      {d:"23/10", t:"Luiz Eduardo Neves da Silva Santos — PIX (frete)", v:-100.00, cat:"pagamento"},
+      {d:"23/10", t:"Prime Lar Comércio e Serviços — ENTRADA Pix", v:1020.00, cat:"recebimento"},
+      {d:"23/10", t:"Francisco Demontier Pereira Lopes Junior — Pix", v:-500.00, cat:"pagamento"},
+      {d:"23/10", t:"Patrick Mendes — Pix", v:-500.00, cat:"pagamento"},
+      {d:"23/10", t:"Secretaria de Fazenda RJ — pagamento", v:-471.36, cat:"tributo"},
+      {d:"22/10", t:"Leandro (CPF 132.551.527-20)", v:-1625.00, cat:"pagamento"},
+      {d:"22/10", t:"Facebook — impulsionamento", v:-100.00, cat:"marketing"},
+      {d:"21/10", t:"Acordo BR Supply (03.746.938/0001-43)", v:-6885.57, cat:"pagamento"},
+      {d:"21/10", t:"Transferência Gabriel", v:-1200.00, cat:"transferência"},
+      {d:"20/10", t:"LinkedIn — assinatura (Revolut)", v:-150.00, cat:"ferramenta"},
+      {d:"20/10", t:"Amazon (compra CEDAE)", v:-792.15, cat:"compra"},
+      {d:"20/10", t:"Wanderson DJ (2ª)", v:-356.00, cat:"pagamento"},
+      {d:"20/10", t:"Facebook — impulsionamento", v:-80.00, cat:"marketing"},
+      {d:"20/10", t:"Luciana (CEJA) — 1º pagamento", v:-2500.00, cat:"pagamento"},
+      {d:"20/10", t:"Wanderson DJ", v:-384.57, cat:"pagamento"},
+      {d:"20/10", t:"Enel Escritório", v:-372.70, cat:"conta"},
+      {d:"20/10", t:"Gustavo", v:-7000.00, cat:"pagamento"},
+      {d:"19/10", t:"Saldo inicial da conta", v:37849.90, cat:"base"}
     ]
   },
   insights: [
@@ -233,6 +309,7 @@ const ABAS=[
  {id:'rotina', ic:'🗓', t:'Rotina', bt:'🗓'},
  {id:'principios', ic:'⚖️', t:'Princípios', bt:'⚖️'},
  {id:'registros', ic:'📎', t:'Registros', bt:'📎'},
+ {id:'integracoes', ic:'🔌', t:'Integrações', bt:'🔌'},
  {id:'circuito', ic:'🔁', t:'Circuito', bt:'🔁'}
 ];
 let aba='hoje';
@@ -259,11 +336,42 @@ function render(){
   else if(aba==='rotina') v.innerHTML=vRotina();
   else if(aba==='principios') v.innerHTML=vPrincipios();
   else if(aba==='registros') v.innerHTML=vRegistros();
+  else if(aba==='integracoes') v.innerHTML=vIntegracoes();
   else if(aba==='circuito') v.innerHTML=vCircuito();
   save();
 }
 </script>
 <script>
+
+/* ================= GRÁFICOS (v5.2) ================= */
+function anelSVG(pct, cor){
+  const r=38, c=2*Math.PI*r, off=c*(1-Math.min(pct,100)/100);
+  return `<svg viewBox="0 0 92 92"><circle cx="46" cy="46" r="${r}" fill="none" stroke="var(--line)" stroke-width="9"/><circle cx="46" cy="46" r="${r}" fill="none" stroke="${cor}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"/></svg>`;
+}
+function grafSemana(){
+  const dias={};
+  (CLOUD.financeiro.lancs||[]).forEach(l=>{
+    const dd=l.d.split('/'); const k=l.d.slice(0,5);
+    if(!dias[k]) dias[k]={pos:0,neg:0};
+    if(l.v>0) dias[k].pos+=l.v; else dias[k].neg+=Math.abs(l.v);
+  });
+  const hojeD=dataHoje;
+  const ord=Object.keys(dias).sort((a,b)=>{
+    const pa=a.split('/').reverse().join('-'), pb=b.split('/').reverse().join('-');
+    return pa<pb?-1:pa>pb?1:0;
+  }).slice(-7);
+  const max=Math.max(1,...ord.map(k=>Math.max(dias[k].pos,dias[k].neg)));
+  let h=`<div class="gbars">`;
+  ord.forEach(k=>{
+    const [d,m]=k.split('/');
+    h+=`<div class="gbar"><div class="cols">
+    <div class="c" style="height:${Math.max(2,dias[k].pos/max*80)}px;background:var(--verde)" title="Entradas R$ ${dias[k].pos.toLocaleString('pt-BR')}"></div>
+    <div class="c" style="height:${Math.max(2,dias[k].neg/max*80)}px;background:var(--verm)" title="Saídas R$ ${dias[k].neg.toLocaleString('pt-BR')}"></div>
+    </div><div class="dia">${d}/${m}</div></div>`;
+  });
+  h+=`</div><div class="gleg"><span><span class="gdot" style="background:var(--verde)"></span>Entradas</span><span><span class="gdot" style="background:var(--verm)"></span>Saídas</span><span>· últimos 7 dias com movimento</span></div>`;
+  return h;
+}
 /* ================= VIEWS ================= */
 function vHoje(){
   const f=focoAgora();
@@ -271,7 +379,14 @@ function vHoje(){
   let h='';
   if(CLOUD.v>S.syncv) h+=`<div class="banner">🟢 Nova versão na nuvem (v${CLOUD.v})<button class="btn sm g" onclick="pullCloud()">🔄 ATUALIZAR</button></div>`;
   h+=`<div class="insight"><div class="ilbl">💡 Insight do dia</div><div class="itxt">${esc(insHoje.t)}</div><div class="isrc">— ${esc(insHoje.s)} · <a href="#" onclick="trocaInsight();return false" style="color:var(--azul2);font-weight:700">outro insight →</a></div></div>`;
-  h+=`<div class="hero"><div class="lbl">🎯 Foco de agora</div>`;
+  const abertas=CLOUD.demandas.filter(d=>d.status!=='feita'&&!S.feito[d.id]).length;
+  const pctDia=Math.min(100,Math.round(feitasHoje/Math.max(1,feitasHoje+abertas)*100));
+  const reconPct=Math.round(CLOUD.frentes.reduce((a,x)=>a+x.pct,0)/CLOUD.frentes.length);
+  const ang=pctDia*3.6;
+  h+=`<div class="hero"><div style="display:flex;gap:14px;align-items:center;margin-bottom:14px">
+  <div style="width:64px;height:64px;border-radius:50%;background:conic-gradient(var(--verde) ${ang}deg, rgba(255,255,255,.15) ${ang}deg);display:flex;align-items:center;justify-content:center;flex-shrink:0"><div style="width:46px;height:46px;border-radius:50%;background:var(--azul2);display:flex;flex-direction:column;align-items:center;justify-content:center"><b style="font-size:15px">${pctDia}%</b><span style="font-size:8px;opacity:.8">do dia</span></div></div>
+  <div style="flex:1"><div style="font-size:11px;opacity:.85;margin-bottom:4px">🧭 Reconstrução geral — média das 6 frentes</div><div style="background:rgba(255,255,255,.15);border-radius:8px;height:14px;overflow:hidden"><div style="width:${reconPct}%;height:100%;background:linear-gradient(90deg,#f5c518,#fff);border-radius:8px"></div></div><div style="font-size:10px;opacity:.8;margin-top:3px">${feitasHoje} feito(s) hoje · ${abertas} demandas abertas</div></div></div>
+  <div class="lbl">🎯 Foco de agora</div>`;
   if(f){
     h+=`<div class="acao">${esc(f.t)}</div><div style="font-size:12.5px;opacity:.85;margin-bottom:12px">${esc(f.dev||'')}</div>
     <div class="btnrow"><button class="btn p" onclick="focoFeito(${f.id})">✓ Feito</button><button class="btn s" onclick="go('demandas')">Ver fila</button><button class="btn s" onclick="pedirAjuda(${f.id})">Preciso de ajuda</button></div>`;
@@ -281,11 +396,23 @@ function vHoje(){
   <div class="despejo"><textarea id="desp" placeholder="Escreva QUALQUER coisa: paguei X pro Y, ligar pro Z, ideia, preocupação... O Maestro classifica por você."></textarea><button class="btn g" onclick="despejar()">Despejar</button></div>
   ${S.despejos&&S.despejos.length?`<div style="font-size:11.5px;color:var(--ink2)">Aguardando triagem do Maestro: ${S.despejos.length} despejo(s) — enviados automaticamente via circuito.</div>`:''}
   </div>`;
-  h+=`<div class="grid2">`;
+  const barrasCaixa=(()=>{const dias={};CLOUD.financeiro.lancs.forEach(l=>{const k=(l.d||'').slice(0,5);if(!k)return;if(!dias[k])dias[k]=[0,0];if(l.v>0)dias[k][0]+=l.v;else dias[k][1]+=Math.abs(l.v);});
+    const ks=Object.keys(dias).sort((a,b)=>{const[da,ma]=a.split('/').map(Number),[db,mb]=b.split('/').map(Number);return ma-mb||da-db;}).slice(-7);
+    const max=Math.max(1,...ks.map(k=>Math.max(dias[k][0],dias[k][1])));
+    return ks.map(k=>`<div class="b"><div class="val" style="color:${dias[k][0]>=dias[k][1]?'var(--verde)':'var(--verm)'}">${dias[k][0]>0?'+':'−'}${Math.round(Math.max(dias[k][0],dias[k][1]))}</div><div class="col${dias[k][1]>dias[k][0]?' neg':''}" style="height:${Math.max(6,Math.round(Math.max(dias[k][0],dias[k][1])/max*84))}px"></div><div class="lbl">${k}</div></div>`).join('');})();
+  h+=`<div class="card"><h3>📊 Hoje em números</h3>
+  <div class="anel-dia"><div class="mini" style="--p:${Math.min(100,Math.round(feitasHoje/Math.max(1,feitasHoje+abertas)*100))}"><i><b>${feitasHoje}</b><small>feito(s) hoje</small></i></div>
+  <div style="font-size:12px;color:var(--ink2)">Conclusão do dia — cada ✓ é um peso a menos na cabeça.</div></div>
+  <div class="donut-wrap" style="margin-top:12px"><div class="donut" style="--p:${reconPct}"><i><b>${reconPct}%</b><small>reconstrução</small></i></div>
+  <div style="font-size:12px;color:var(--ink2)">Média das 6 frentes. O gráfico sobe quando as frentes sobem.</div></div>
+  <div class="grafico"><div class="barras">${barrasCaixa}</div></div>
+  <div style="font-size:11.5px;color:var(--ink2);margin-top:6px">Caixa dos últimos 7 dias — verde entra, vermelho sai.</div>
+  </div>`;
+  h+=`<div class="grid3">`;
   h+=`<div class="card"><h3>🧭 Reconstrução</h3>${CLOUD.frentes.map(fr=>`<div class="frente"><div class="fl"><span>${fr.n}</span><span>${fr.pct}%</span></div><div class="barra"><i style="width:${fr.pct}%;background:${fr.cor}"></i></div></div>`).join('')}</div>`;
   h+=`<div class="card"><h3>🗓 Agora na rotina ${feitasHoje?`<span class="tag ok">${feitasHoje} feito(s) hoje</span>`:''}</h3><div class="rotina">${rotinaBlocoAtual()}</div></div>`;
+  h+=`<div class="card"><h3>📬 Devolutivas</h3>${(S.inbox&&S.inbox.length)?S.inbox.slice(-5).reverse().map(m=>`<div class="msg"><div class="mh">${esc(m.h)}</div>${esc(m.t)}</div>`).join(''):'<div class="empty">Sem devolutivas ainda — o Maestro responde cada ação sua aqui.</div>'}</div>`;
   h+=`</div>`;
-  if(S.inbox&&S.inbox.length) h+=`<div class="card"><h3>📬 Devolutivas do Maestro</h3>${S.inbox.slice(-4).reverse().map(m=>`<div class="msg"><div class="mh">${esc(m.h)}</div>${esc(m.t)}</div>`).join('')}</div>`;
   return h;
 }
 function rotinaBlocoAtual(){
@@ -299,8 +426,8 @@ function rotinaBlocoAtual(){
 }
 function vDemandas(){
   let h=`<div class="card"><h3>🎯 Fila única — tudo que existe <span class="tag">${CLOUD.demandas.filter(d=>d.status==='aberta'&&!S.feito[d.id]).length} abertas</span></h3>`;
-  const ord={P0:0,P1:1,P2:2,P3:3};
-  const lista=[...CLOUD.demandas].sort((a,b)=>(ord[a.p]-ord[b.p]));
+  const ord2={P0:0,P1:1,P2:2,P3:3};
+  const lista=[...CLOUD.demandas].sort((a,b)=>(ord2[a.p]-ord2[b.p]));
   lista.forEach(d=>{
     const done=d.status==='feita'||S.feito[d.id];
     h+=`<div class="item ${done?'done':''}"><button class="cb ${done?'done':''}" onclick="toggleDem(${d.id})">${done?'✓':''}</button>
@@ -315,8 +442,10 @@ function vFin(){
   const pos=f.lancs.reduce((s,l)=>s+(l.v>0?l.v:0),0);
   const neg=f.lancs.reduce((s,l)=>s+(l.v<0?l.v:0),0);
   let h=`<div class="card"><h3>💰 Conta corrente</h3><div class="saldo ${f.saldo>=0?'pos':'neg'}">R$ ${f.saldo.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
-  <div style="font-size:12px;color:var(--ink2);margin-top:4px">Entradas recentes: R$ ${pos.toLocaleString('pt-BR')} · Saídas: R$ ${Math.abs(neg).toLocaleString('pt-BR')}</div></div>`;
-  h+=`<div class="card"><h3>🧾 Últimos lançamentos</h3>${f.lancs.map(l=>`<div class="lanc"><div><div>${esc(l.t)}</div><div class="d">${esc(l.d)} · ${esc(l.cat)}</div></div><div class="v ${l.v<0?'neg':l.v>0?'pos':''}">${l.v===0?'—':(l.v<0?'−':'+')+' R$ '+Math.abs(l.v).toLocaleString('pt-BR',{minimumFractionDigits:2})}</div></div>`).join('')}</div>`;
+  <div style="font-size:12px;color:var(--ink2);margin-top:4px">Entradas recentes: R$ ${pos.toLocaleString('pt-BR')} · Saídas: R$ ${Math.abs(neg).toLocaleString('pt-BR')}</div>
+  ${grafSemana()}</div>`;
+  const loc=(S.lancs&&S.lancs.length)?`<div class="card"><h3>📍 Lançados por você (neste dispositivo)</h3>${S.lancs.slice().reverse().map(l=>`<div class="lanc"><div><div>${esc(l.t)}</div><div class="d">${esc(l.h)}</div></div><div class="v">✓</div></div>`).join('')}</div>`:'';
+  h+=`<div class="card"><h3>🧾 Últimos lançamentos</h3>${f.lancs.slice(0,10).map(l=>`<div class="lanc"><div><div>${esc(l.t)}</div><div class="d">${esc(l.d)} · ${esc(l.cat)}</div></div><div class="v ${l.v<0?'neg':l.v>0?'pos':''}">${l.v===0?'—':(l.v<0?'−':'+')+' R$ '+Math.abs(l.v).toLocaleString('pt-BR',{minimumFractionDigits:2})}</div></div>`).join('')}</div>`+loc;
   h+=`<div class="card"><h3>➕ Lançar</h3><div class="despejo"><textarea id="lanctext" placeholder="Ex.: paguei 250 pro Otávio · recebi 1000 do marketplace"></textarea><button class="btn g" onclick="lancar()">Lançar</button></div><div style="font-size:11.5px;color:var(--ink2)">O Maestro registra, classifica e devolve confirmação no circuito.</div></div>`;
   return h;
 }
@@ -348,6 +477,25 @@ function vRegistros(){
   else h+=`<div class="empty">Nada registrado ainda. Conversas, documentos e decisões vivem aqui — e no OneDrive.</div>`;
   h+=`</div>`;
   h+=`<div class="card"><h3>🗂 OneDrive — Sistema 4D</h3><div style="font-size:12.5px;color:var(--ink2);line-height:1.6">Entregas do Maestro em PDF: pasta <b>Sistema 4D</b> → <b>Entregas Maestro</b>.<br>Roteiro CRECI-SP e requerimento preenchido: pasta <b>Área de Trabalho/GABRIEL AQUINO/CRECI</b>.</div></div>`;
+  return h;
+}
+function vIntegracoes(){
+  const integ=[
+    {ic:'✈️', n:'Telegram', s:'ativo', d:'Texto, áudio e foto direto pro Maestro. Comandos: "anota...", "paguei...", "concluí..."', url:'https://t.me/Maestro_aquino_bot'},
+    {ic:'📧', n:'Outlook', s:'ativo', d:'E-mails lidos e triados pelo Maestro — demandas viram itens no sistema', url:''},
+    {ic:'📹', n:'Google Meet / Teams', s:'pronto p/ conectar', d:'Reuniões viram compromissos na agenda com link automático', url:''},
+    {ic:'📁', n:'Google Drive / OneDrive', s:'OneDrive ativo', d:'Documentos vinculados às demandas — Docs em cada item', url:''},
+    {ic:'💬', n:'WhatsApp Business', s:'configurando', d:'Recepção via relay Netlify — próxima rodada', url:''},
+    {ic:'🗓', n:'Google Calendar', s:'pronto p/ conectar', d:'Agenda sincronizada — compromissos aparecem no Hoje', url:''}
+  ];
+  let h=`<div class="card"><h3>🔌 Integrações — o sistema conecta com sua vida</h3>`;
+  h+=integ.map(i=>`<div class="item"><div style="font-size:20px;width:26px;text-align:center">${i.ic}</div><div class="tx"><div class="tt">${i.n} <span class="tag ${i.s==='ativo'?'ok':''}">${i.s}</span></div><div class="meta">${i.d}</div></div>${i.url?`<button class="act" onclick="window.open('${i.url}','_blank')">↗</button>`:''}</div>`).join('');
+  h+=`</div>`;
+  h+=`<div class="card"><h3>📅 Compromissos PROSCI (agenda viva)</h3>
+  <div class="item"><div class="tx"><div class="tt">Fase 2 — Diretora Global</div><div class="meta"><span class="tag p1">P1</span>📅 29/10 · roteiro em produção pelo Maestro</div></div></div>
+  <div class="item"><div class="tx"><div class="tt">Pitch final</div><div class="meta"><span class="tag p1">P1</span>📅 06/11 · preparar com dados B2G/B2B</div></div></div>
+  <div class="item"><div class="tx"><div class="tt">Início no PROSCI</div><div class="meta"><span class="tag ok">meta</span>📅 09/11 · se aprovado</div></div></div>
+  </div>`;
   return h;
 }
 function vCircuito(){
@@ -385,13 +533,18 @@ function focoFeito(id){ if(!S.feito[id]){ S.feito[id]={dia:dataHoje,ts:Date.now(
  enfileira('acao',{actions:[{type:'demanda',id,done:!!S.feito[id]}]}); render(); }
 function pedirAjuda(id){ const d=CLOUD.demandas.find(x=>x.id===id); enfileira('ajuda',{text:'Preciso de ajuda com: '+d.t}); alerta('Pedido de ajuda enviado ao Maestro ✓'); render(); }
 function despejar(){ const t=$('desp').value.trim(); if(!t)return; S.despejos=S.despejos||[]; S.despejos.push({h:agora(),t}); enfileira('despejo',{text:t}); $('desp').value=''; alerta('Despejado ✓ — o Maestro classifica e devolve'); render(); }
-function lancar(){ const t=$('lanctext').value.trim(); if(!t)return; enfileira('lancamento',{text:t}); $('lanctext').value=''; alerta('Lançamento enviado ao Maestro ✓'); }
+function lancar(){ const t=$('lanctext').value.trim(); if(!t)return;
+ S.lancs=S.lancs||[]; S.lancs.push({h:agora(),t});
+ try{ const m=t.match(/(paguei|recebi)\s*(?:r?\$?\s*)?([\d.,]+)/i); const v=m?parseFloat(m[2].replace('.','').replace(',','.')):0;
+  const neg=/paguei/i.test(t); if(v){ CLOUD.financeiro.lancs.unshift({d:dataHoje,t:t.charAt(0).toUpperCase()+t.slice(1),v:neg?-v:v,cat:'local'}); CLOUD.financeiro.saldo=+(CLOUD.financeiro.saldo+(neg?-v:v)).toFixed(2);} }catch(e){}
+ enfileira('lancamento',{text:t}); $('lanctext').value=''; alerta('Lançamento registrado ✓ — saldo atualizado e Maestro notificado'); render(); }
 function registrar(){ const t=$('regtext').value.trim(); if(!t)return; S.reflexoes=S.reflexoes||[]; S.reflexoes.push({h:agora(),t}); enfileira('registro',{text:t}); $('regtext').value=''; alerta('Registrado ✓'); render(); }
 function trocaInsight(){ const i=CLOUD.insights.indexOf(insHoje); const n=CLOUD.insights[(i+1)%CLOUD.insights.length]; $('view').querySelector('.itxt').textContent=n.t; $('view').querySelector('.isrc').firstChild.textContent='— '+n.s+' · '; }
 function agora(){ return dataHoje+' '+String(hoje.getHours()).padStart(2,'0')+':'+String(hoje.getMinutes()).padStart(2,'0'); }
 function alerta(t){ const d=document.createElement('div'); d.style.cssText='position:fixed;top:14px;left:50%;transform:translateX(-50%);background:#1b6e3c;color:#fff;padding:11px 18px;border-radius:12px;font-size:13.5px;font-weight:700;z-index:200;box-shadow:0 4px 14px rgba(0,0,0,.25)'; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
 function detDem(id){ const d=CLOUD.demandas.find(x=>x.id===id);
  const h=(S.hist&&S.hist[id])||[]; const dc=(S.docs&&S.docs[id])||[]; const fb=(S.fb&&S.fb[id])||[];
+ const nFeito=h.filter(x=>x.ev==='feito').length;
  $('mbox').innerHTML=`<h3>${esc(d.t)}</h3>
 <div class="pill"><span class="dot" style="background:var(--azul2)"></span>${esc(d.p)}</div><div class="pill"><span class="dot" style="background:var(--roxo)"></span>${esc(d.area)}</div><div class="pill"><span class="dot" style="background:var(--dourado)"></span>${esc(d.tipo)}</div><div class="pill"><span class="dot" style="background:var(--verde)"></span>📅 ${esc(d.prazo)} · resp: ${esc(d.resp)}</div>
 <label>Contexto e plano</label><div class="msg">${esc(d.dev||'—')}</div>
@@ -431,6 +584,7 @@ function detFb(id){ const t=$('detfb').value.trim(); if(!t)return;
  S.fb=S.fb||{}; (S.fb[id]=S.fb[id]||[]).push({h:agora(),t});
  S.hist=S.hist||{}; (S.hist[id]=S.hist[id]||[]).push({h:agora(),ev:'feedback',t});
  enfileira('feedback',{text:'[demanda #'+id+'] feedback: '+t}); alerta('Feedback enviado ✓ — o Maestro avalia e devolve'); detDem(id); }
+function fecharModal(){ $('modal').classList.remove('open'); }
 /* ================= CIRCUITO (webhook automático) ================= */
 const WEBHOOK='https://maestro.adapta.one/webhooks/generic/9a746a69d6672d60dd9e3630bc69c668e303e6f4074c048b43ff5507cf92f7fe';
 const SECRET='6cc7ad6014a9f715d57a4a9c1640ac921edb1704250293aced92ff1adf358d38';
@@ -444,12 +598,13 @@ function flush(){
   const item=S.outbox[0];
   const body=JSON.stringify({source:item.source,device:item.device,ts:item.h,text:item.text||'',actions:item.actions||[],stats:{pend:CLOUD.demandas.filter(d=>d.status==='aberta'&&!S.feito[d.id]).length,saldo:CLOUD.financeiro.saldo}});
   try{
-    fetch(WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:body+String.fromCharCode(10)+'secret:'+SECRET})
+    fetch(WEBHOOK+'?secret='+SECRET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:body})
     .then(()=>{S.outbox.shift();save();if(S.outbox.length)setTimeout(flush,800);else if(aba==='circuito')render();})
     .catch(()=>{});
   }catch(e){}
 }
 function pullCloud(){ S.syncv=CLOUD.v; save(); alerta('Atualizado para v'+CLOUD.v+' ✓'); render(); }
+function abrirNoSistema(){ /* fallback */ }
 /* ================= INIT ================= */
 $('btndark').onclick=()=>{S.dark=!S.dark;document.body.classList.toggle('dark',S.dark);save();};
 document.body.classList.toggle('dark',!!S.dark);
@@ -466,4 +621,4 @@ $('modal').addEventListener('click',e=>{if(e.target.id==='modal')fecharModal();}
 renderNav(); render(); flush();
 </script>
 </body>
-</html>
+</html><script async src="/.netlify/scripts/hud?variant=public" data-nf-variant="public" data-netlify-site-id="670e7fd9-e41b-4c6a-a470-8810016e4de0" data-app-host="app.netlify.com" data-account-tier="free"></script>
