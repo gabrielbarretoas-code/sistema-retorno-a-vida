@@ -14,9 +14,456 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
 body.dark{--bg:#0f1420;--card:#1a2130;--ink:#e8ecf4;--ink2:#9aa4ba;--line:#2a3348;--shadow:0 2px 10px rgba(0,0,0,.4)}
+/* ===== LAYOUT ===== */
+.app{display:flex;min-height:100vh}
+.side{width:230px;background:var(--azul);color:#fff;padding:18px 0;position:fixed;top:0;bottom:0;left:0;display:flex;flex-direction:column;z-index:50}
+.logo{padding:0 18px 16px;border-bottom:1px solid rgba(255,255,255,.15)}
+.logo h1{font-size:17px;font-weight:800;letter-spacing:.3px}
+.logo p{font-size:10.5px;opacity:.75;margin-top:3px}
+.nav{flex:1;padding:10px 8px;overflow-y:auto}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;color:rgba(255,255,255,.75);padding:11px 12px;border-radius:10px;font-size:14px;cursor:pointer;text-align:left;font-family:inherit}
+.nav button.on{background:rgba(255,255,255,.16);color:#fff;font-weight:600}
+.nav .ic{font-size:17px;width:22px;text-align:center}
+.sidefoot{padding:12px 18px;border-top:1px solid rgba(255,255,255,.15);font-size:10.5px;opacity:.7}
+.main{flex:1;margin-left:230px;padding:20px 24px 90px;max-width:860px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.topbar h2{font-size:21px;font-weight:800}
+.topbar .sub{font-size:12px;color:var(--ink2);margin-top:2px}
+.tb-actions{display:flex;gap:8px;align-items:center}
+.iconbtn{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:15px;cursor:pointer;color:var(--ink)}
+/* ===== MOBILE ===== */
+@media(max-width:760px){
+  .side{display:none}
+  .main{margin-left:0;padding:14px 14px 100px}
+  .bottomnav{display:flex !important}
+}
+.bottomnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);z-index:60;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.bottomnav button{flex:1;background:none;border:none;font-size:10px;color:var(--ink2);cursor:pointer;padding:4px 0;font-family:inherit}
+.bottomnav button.on{color:var(--azul2);font-weight:700}
+.bottomnav .bic{font-size:19px;display:block;margin-bottom:2px}
+/* ===== COMPONENTES ===== */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+.card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.card h3 .tag{margin-left:auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.hero{background:linear-gradient(135deg,var(--azul),var(--azul2));color:#fff;border:none;border-radius:16px;padding:20px;margin-bottom:14px}
+.hero .lbl{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;opacity:.8}
+.hero .acao{font-size:19px;font-weight:800;line-height:1.35;margin:8px 0 14px}
+.hero .btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:none;border-radius:10px;padding:11px 16px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn.p{background:#fff;color:var(--azul)}
+.btn.s{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.35)}
+.btn.g{background:var(--verde);color:#fff}
+.btn.o{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.d{background:var(--verm);color:#fff}
+.btn.sm{padding:7px 11px;font-size:12px}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--bg);border:1px solid var(--line);color:var(--ink2)}
+.tag.p0{background:#fdecec;color:var(--verm);border-color:#f5c6c2}
+.tag.p1{background:#fff4e5;color:var(--laranja);border-color:#f0d9b8}
+.tag.p2{background:#eef3fb;color:var(--azul2);border-color:#d4e0f0}
+.tag.ok{background:#e8f5ee;color:var(--verde);border-color:#c2e3cf}
+.tag.area{background:#f3eefb;color:var(--roxo);border-color:#e0d4f2}
+.insight{background:linear-gradient(135deg,#fff8e8,#fdf0d5);border:1px solid #eadfb8;border-radius:14px;padding:16px;margin-bottom:14px}
+body.dark .insight{background:linear-gradient(135deg,#2a2410,#241f0e);border-color:#4a3f1a}
+.insight .ilbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#8a6d1a;font-weight:800}
+body.dark .insight .ilbl{color:#d4b34a}
+.insight .itxt{font-size:14.5px;line-height:1.5;margin-top:7px;font-weight:600}
+.insight .isrc{font-size:11px;color:var(--ink2);margin-top:8px;font-style:italic}
+.despejo{display:flex;gap:8px;margin-bottom:14px}
+.despejo textarea{flex:1;resize:none;border:1.5px solid var(--line);border-radius:12px;padding:12px;font-size:14px;font-family:inherit;background:var(--card);color:var(--ink);min-height:52px}
+.despejo textarea:focus{outline:none;border-color:var(--azul2)}
+.despejo button{align-self:flex-end}
+.item{display:flex;gap:10px;align-items:flex-start;padding:11px 4px;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:none}
+.item .cb{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);background:none;cursor:pointer;flex-shrink:0;font-size:13px;line-height:1;color:#fff;margin-top:1px}
+.item .cb.done{background:var(--verde);border-color:var(--verde)}
+.item .tx{flex:1;min-width:0}
+.item .tt{font-size:14px;font-weight:600;line-height:1.35}
+.item.done .tt{text-decoration:line-through;color:var(--ink2);font-weight:500}
+.item .meta{font-size:11.5px;color:var(--ink2);margin-top:3px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.item .act{background:none;border:none;cursor:pointer;font-size:15px;color:var(--ink2);padding:4px}
+.barra{height:9px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:6px}
+.barra i{display:block;height:100%;border-radius:6px;transition:width .5s}
+.frente{margin-bottom:12px}
+.frente .fl{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:2px}
+.frente .fl span:last-child{color:var(--ink2)}
+.saldo{font-size:30px;font-weight:800;letter-spacing:-.5px}
+.saldo.pos{color:var(--verde)}
+.saldo.neg{color:var(--verm)}
+.lanc{display:flex;justify-content:space-between;padding:9px 2px;border-bottom:1px solid var(--line);font-size:13.5px}
+.lanc:last-child{border:none}
+.lanc .v{font-weight:700}
+.lanc .v.neg{color:var(--verm)}
+.lanc .v.pos{color:var(--verde)}
+.lanc .d{color:var(--ink2);font-size:11.5px;margin-top:2px}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:22px;padding:6px 12px;font-size:12px;font-weight:600;margin:0 6px 8px 0}
+.pill .dot{width:9px;height:9px;border-radius:50%}
+.rotina .bl{display:flex;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line);font-size:13px}
+.rotina .bl:last-child{border:none}
+.rotina .hr{font-weight:800;color:var(--azul2);width:86px;flex-shrink:0;font-size:12.5px}
+.rotina .sag{color:var(--dourado);font-weight:700}
+.msg{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.45}
+.msg .mh{font-size:11px;color:var(--ink2);margin-bottom:4px;font-weight:600}
+.empty{text-align:center;color:var(--ink2);font-size:13px;padding:26px 10px}
+.banner{background:#e8f5ee;border:1px solid #c2e3cf;color:var(--verde);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:13.5px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fab{position:fixed;right:18px;bottom:84px;background:var(--azul);color:#fff;border:none;border-radius:50%;width:52px;height:52px;font-size:22px;cursor:pointer;box-shadow:0 4px 14px rgba(20,30,60,.3);z-index:55}
+.modal{position:fixed;inset:0;background:rgba(10,15,30,.55);z-index:100;display:none;align-items:flex-end;justify-content:center}
+.modal.open{display:flex}
+.mbox{background:var(--card);border-radius:18px 18px 0 0;padding:20px;width:100%;max-width:520px;max-height:85vh;overflow-y:auto}
+@media(min-width:761px){.modal{align-items:center}.mbox{border-radius:18px}}
+.mbox h3{font-size:16px;margin-bottom:12px}
+.mbox label{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:10px 0 5px}
+.mbox input,.mbox select,.mbox textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--ink)}
+.mbox input:focus,.mbox select:focus,.mbox textarea:focus{outline:none;border-color:var(--azul2)}
+.mrow{display:flex;gap:8px;margin-top:16px}
+.mrow .btn{flex:1}
 </style>
 </head>
 <body>
-<p>PLACEHOLDER — conteúdo completo no arquivo SISTEMA_RETORNO_A_VIDA.html</p>
+<div class="app">
+  <aside class="side">
+    <div class="logo"><h1>🌅 Retorno à Vida</h1><p>Organizador-Decisor · v1</p></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="sidefoot">Deus · Família · Saúde · Provimento<br>Sucesso · Paz de Espírito</div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div><h2 id="vtitle">Hoje</h2><div class="sub" id="vsub"></div></div>
+      <div class="tb-actions">
+        <button class="iconbtn" id="btndark" title="Tema">🌙</button>
+      </div>
+    </div>
+    <div id="view"></div>
+  </main>
+</div>
+<nav class="bottomnav" id="bnav"></nav>
+<button class="fab" id="fab">＋</button>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<script>
+/* ================= CLOUD (Maestro injeta via OneDrive) ================= */
+const CLOUD = {
+  v: 2,
+  principios: [
+    {n:"Deus", d:"Primeiro de tudo. A rotina protege o tempo com Deus — nada invade o bloco 05:30–09:00."},
+    {n:"Família", d:"Rosiane e as 3 filhas. Decisões passam por: isso protege minha família?"},
+    {n:"Saúde", d:"Corpo e mente sustentam a reconstrução. Sono, alimentação, movimento."},
+    {n:"Provimento", d:"Gerar receita é missão: BR Supply, PROSCI, CEDAE, marketplace."},
+    {n:"Sucesso", d:"Progresso real e medido — não movimento. Cada semana avança uma frente."},
+    {n:"Paz de Espírito", d:"O sistema carrega o peso, não a cabeça. Cabeça livre = decisões boas."}
+  ],
+  frentes: [
+    {n:"Receita", cor:"#1b6e3c", pct:35, marcos:["BR Supply R$440k homologada","Contrato PROSCI assinado","Pipeline CEDAE ativo"]},
+    {n:"Dívidas", cor:"#c46a00", pct:25, marcos:["Lote semanal de posicionamento rodando","Acordos com parcelas pagas","Jurídico blindado"]},
+    {n:"Jurídico", cor:"#b3261e", pct:20, marcos:["Advogado constituído","Defesas organizadas","Processos sob controle"]},
+    {n:"Família", cor:"#5b3a8e", pct:60, marcos:["Blocos diários protegidos","Tempo de qualidade real","Esposa e filhas em paz"]},
+    {n:"Saúde", cor:"#2d5f8f", pct:40, marcos:["Sono regular","Movimento diário","Mente clara"]},
+    {n:"Espírito", cor:"#b8860b", pct:80, marcos:["Rotina matinal sagrada","Oração em casal","Paz de espírito"]}
+  ],
+  demandas: [
+    {id:1, t:"Camilo: enviar posicionamento com data + valor do próximo pagamento", tipo:"mensagem", area:"financeiro", p:"P0", prazo:"27/10", status:"aberta", resp:"Gabriel", dev:"Mensagem pronta pelo Maestro — só copiar e enviar"},
+    {id:2, t:"Lote semanal de posicionamento p/ credores (Maestro monta, Gabriel envia)", tipo:"tarefa", area:"financeiro", p:"P0", prazo:"27/10", status:"aberta", resp:"Maestro", recorrencia:"semanal", dev:"Rodando — mensagens prontas a cada segunda. Recorrente: volta toda segunda."},
+    {id:3, t:"CRECI-SP: confirmar diploma TTI + digitalizar 6 documentos", tipo:"tarefa", area:"trabalho", p:"P1", prazo:"31/10", status:"aberta", resp:"Gabriel", dev:"Roteiro PDF no OneDrive (pasta CRECI). Diploma define a rota"},
+    {id:4, t:"PROSCI Fase 2: roteiro Diretora Global (Maestro entrega)", tipo:"tarefa", area:"trabalho", p:"P1", prazo:"29/10", status:"aberta", resp:"Maestro", dev:"Fase 1 ok (Liliane). Próx: Diretora Global 29/10, pitch 06/11, início 09/11"},
+    {id:5, t:"BR Supply/Miguel: cobrar andamento da homologação (R$ 440k)", tipo:"mensagem", area:"financeiro", p:"P1", prazo:"31/10", status:"aberta", resp:"Gabriel", recorrencia:"semanal", dev:"Maior alavanca de caixa — cobrança semanal amigável. Cada 'feito' registra o evento e agenda a próxima cobrança."},
+    {id:6, t:"Serpa: sem retorno → acionar Miroel (advogado alternativo)", tipo:"ligacao", area:"juridico", p:"P1", prazo:"30/10", status:"aberta", resp:"Gabriel", dev:"Gatilho: se Serpa não respondeu, Miroel é o próximo"},
+    {id:7, t:"CEDAE/Melina: follow-up vendas + novas participações", tipo:"mensagem", area:"trabalho", p:"P2", prazo:"31/10", status:"aberta", resp:"Gabriel", dev:"Pipeline médio — manter aquecido"},
+    {id:8, t:"Marketplace: reativar anúncios (bebedouros, ar-cond, TV)", tipo:"tarefa", area:"financeiro", p:"P2", prazo:"01/11", status:"aberta", resp:"Maestro", dev:"Reescrever anúncios + precificação"},
+    {id:9, t:"SONG: estratégia do financiamento atrasado (risco busca e apreensão)", tipo:"pesquisa", area:"juridico", p:"P2", prazo:"09/11", status:"aberta", resp:"Maestro", dev:"Mapear renegociação vs venda antes da busca"},
+    {id:10, t:"Adriano: caminhão em garantia — estrutura de solução", tipo:"pesquisa", area:"juridico", p:"P2", prazo:"09/11", status:"aberta", resp:"Maestro", dev:"Negociação banco + comprador intermediário"}
+  ],
+  financeiro: {
+    saldo: 16003.91,
+    lancs: [
+      {d:"23/10", t:"Pix Luiz Eduardo (frete marketplace)", v:-100.00, cat:"frete"},
+      {d:"23/10", t:"Recarga Revolut (Pro Adapta Maestro)", v:-300.00, cat:"ferramenta"},
+      {d:"22/10", t:"Saldo âncora conferido (R$ 37.849,90 − 12 pagamentos)", v:0, cat:"base"}
+    ]
+  },
+  insights: [
+    {t:"Você não precisa resolver o caos hoje. Precisa acertar O PRÓXIMO PASSO — e o sistema te diz qual é.", s:"Ray Dalio, Princípios"},
+    {t:"O caos não se vence com força, vence-se com ordem. Uma frente por vez, uma ação por vez.", s:"Método"},
+    {t:"Emoção alta = decisão ruim. Quando a cabeça ferver, despeje aqui e deixe o Maestro processar.", s:"Neurociência da decisão"},
+    {t:"Credor informado é credor paciente. Posicionamento semanal vale mais que pagamento raro.", s:"Negociação"},
+    {t:"Sua maior alavanca é a BR Supply (R$ 440k). Tudo o mais é paliativo — proteja o tempo dela.", s:"Quadro 22/10"},
+    {t:"A rotina matinal 05:30–09:00 é o alicerce. Nada — nem o caos — invade esse bloco.", s:"Seus princípios"},
+    {t:"19 das 50 pendências eram a MESMA tarefa disfarçada: dar retorno. Lote semanal resolve.", s:"Lição do 4D"},
+    {t:"Progresso medido é combustível. Marque feito, veja a frente subir, sinta o avanço.", s:"High performance"},
+    {t:"Dizer não a uma demanda boa é dizer sim à sua reconstrução. Prioridade é isso.", s:"Foco"},
+    {t:"O avião voa enquanto se conserta. Use o sistema imperfeito HOJE — o uso mostra o que aperfeiçoar.", s:"Gabriel, 26/10"},
+    {t:"Família não é recompensa do sucesso — é o motivo dele. Bloco com as filhas é compromisso P0.", s:"Seus valores"},
+    {t:"Dívida enfrentada encolhe; dívida evitada cresce. Cada mensagem enviada é um peso a menos.", s:"Reconstrução"},
+    {t:"Você não está voltando ao zero: está escalando com experiência que o default te deu.", s:"Entrevista PROSCI"},
+    {t:"Deus primeiro não é frase — é agenda. O bloco sagrado de manhã sustenta todos os outros.", s:"Seus princípios"},
+    {t:"Paz de espírito é resultado de sistema, não de sorte. Cabeça vazia de pendências = mente clara.", s:"Filosofia do sistema"}
+  ],
+  rotina: {
+    seg:[["05:30","Acorde · oração pessoal (sagrado)"],["06:45","Escola com Rosiane e as crianças (sagrado)"],["07:40","Santíssimo + oração em casal até ~08:50 (sagrado)"],["09:00","Briefing Maestro: insight + foco do dia"],["09:30","BLOCO P0: Camilo + lote credores + CRECI docs"],["12:00","Almoço em família (sagrado)"],["13:30","BLOCO RECEITA: BR Supply, CEDAE, PROSCI"],["17:00","Família · filhas · casa"],["19:30","Despejo do dia no sistema (5 min) + reflexão"],["20:30","Família · descanso"]],
+    ter:[["05:30","Acorde · oração pessoal (sagrado)"],["06:45","Escola + Santíssimo + oração em casal (sagrado)"],["09:00","Briefing Maestro"],["09:30","BLOCO P0/Receita"],["12:00","Almoço em família (sagrado)"],["13:30","BLOCO RECEITA/PROSPECÇÃO"],["17:00","Família"],["19:30","Despejo do dia + reflexão"],["20:30","Família · descanso"]],
+    qua:[["05:30","Acorde · oração pessoal (sagrado)"],["06:45","Escola + Santíssimo + oração em casal (sagrado)"],["09:00","Briefing Maestro"],["09:30","BLOCO P0/Jurídico"],["12:00","Almoço em família (sagrado)"],["13:30","BLOCO RECEITA"],["17:00","Família"],["19:30","Despejo do dia + reflexão"],["20:30","Família · descanso"]],
+    qui:[["05:30","Acorde · oração pessoal (sagrado)"],["06:45","Escola + Santíssimo + oração em casal (sagrado)"],["09:00","Briefing Maestro"],["09:30","BLOCO P0/Receita"],["12:00","Almoço em família (sagrado)"],["13:30","BLOCO PROSPECÇÃO (caçada oportunidades)"],["17:00","Família"],["19:30","Despejo do dia + reflexão"],["20:30","Família · descanso"]],
+    sex:[["05:30","Acorde · oração pessoal (sagrado)"],["06:45","Escola + Santíssimo + oração em casal (sagrado)"],["09:00","Briefing Maestro"],["09:30","BLOCO P0/Fechar semana"],["12:00","Almoço em família (sagrado)"],["13:30","BLOCO RECEITA/Fechamento"],["17:00","Família"],["19:30","Despejo da semana + reflexão"],["20:30","Família · descanso"]],
+    sab:[["05:30","Acorde · oração pessoal (sagrado)"],["07:40","Oração em casal (sagrado)"],["09:00","LEVE: 1h sistema com Maestro (melhorias)"],["10:00","Família · mercado · casa"],["14:00","Descanso · família"],["19:30","Reflexão da semana"],["20:30","Família"]],
+    dom:[["05:30","Acorde · oração pessoal (sagrado)"],["08:00","Missa · Deus primeiro (sagrado)"],["11:00","Família · almoço · dia livre"],["16:00","Família · descanso"],["19:30","Preparar a semana com o Maestro (15 min)"],["20:30","Família · descanso"]]
+  },
+  devolutivas: [
+    {h:"26/10 10:25", t:"Documento-fundador recebido e registrado. Sistema v1 construído sobre seus princípios. Próximo: uso real → melhorias diárias."}
+  ]
+};
+/* ================= ESTADO ================= */
+const LS='sistema_rv';
+let S = {syncv:0, dark:false, feito:{}, despejos:[], reflexoes:[], inbox:[], hist:{}, docs:{}, fb:{}};
+try{ const raw=localStorage.getItem(LS); if(raw) S=Object.assign(S, JSON.parse(raw)); }catch(e){}
+function save(){ localStorage.setItem(LS, JSON.stringify(S)); }
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const DIAS=['dom','seg','ter','qua','qui','sex','sab'];
+const DIASN={dom:'Domingo',seg:'Segunda-feira',ter:'Terça-feira',qua:'Quarta-feira',qui:'Quinta-feira',sex:'Sexta-feira',sab:'Sábado'};
+const hoje=new Date(); const diaSem=DIAS[hoje.getDay()];
+const dataHoje=hoje.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+const horaAgora=hoje.getHours();
+const idxInsight=Math.floor(hoje.getTime()/864e5)%CLOUD.insights.length;
+const insHoje=CLOUD.insights[idxInsight];
+const rotinaHoje=CLOUD.rotina[diaSem]||[];
+/* ================= ABAS ================= */
+const ABAS=[
+ {id:'hoje', ic:'🌅', t:'Hoje', bt:'Hoje'},
+ {id:'demandas', ic:'🎯', t:'Demandas', bt:'Demandas'},
+ {id:'financeiro', ic:'💰', t:'Financeiro', bt:'💰'},
+ {id:'rotina', ic:'🗓', t:'Rotina', bt:'🗓'},
+ {id:'principios', ic:'⚖️', t:'Princípios', bt:'⚖️'},
+ {id:'registros', ic:'📎', t:'Registros', bt:'📎'},
+ {id:'circuito', ic:'🔁', t:'Circuito', bt:'🔁'}
+];
+let aba='hoje';
+function renderNav(){
+  $('nav').innerHTML=ABAS.map(a=>`<button class="${aba===a.id?'on':''}" onclick="go('${a.id}')"><span class="ic">${a.ic}</span>${a.t}</button>`).join('');
+  $('bnav').innerHTML=ABAS.map(a=>`<button class="${aba===a.id?'on':''}" onclick="go('${a.id}')"><span class="bic">${a.ic}</span>${a.bt}</button>`).join('');
+}
+function go(id){aba=id;renderNav();render();}
+/* ================= FOCO DE AGORA ================= */
+function focoAgora(){
+  const abertas=CLOUD.demandas.filter(d=>d.status==='aberta'&&!S.feito[d.id]);
+  const ord={P0:0,P1:1,P2:2,P3:3};
+  abertas.sort((a,b)=>(ord[a.p]-ord[b.p])||((prazoNum(a.prazo))-(prazoNum(b.prazo))));
+  return abertas[0]||null;
+}
+function prazoNum(p){ if(!p) return 9999; const [d,m]=p.split('/').map(Number); return (m*100)+d-((hoje.getMonth()+1)*100+hoje.getDate())<0?9000+((m*100)+d):((m*100)+d); }
+function render(){
+  $('vtitle').textContent=ABAS.find(a=>a.id===aba).t;
+  $('vsub').textContent=DIASN[diaSem]+', '+dataHoje+(horaAgora<9?' · bloco sagrado até 09:00':horaAgora<12?' · manhã produtiva':horaAgora<17?' · tarde produtiva':' · família e paz');
+  const v=$('view');
+  if(aba==='hoje') v.innerHTML=vHoje();
+  else if(aba==='demandas') v.innerHTML=vDemandas();
+  else if(aba==='financeiro') v.innerHTML=vFin();
+  else if(aba==='rotina') v.innerHTML=vRotina();
+  else if(aba==='principios') v.innerHTML=vPrincipios();
+  else if(aba==='registros') v.innerHTML=vRegistros();
+  else if(aba==='circuito') v.innerHTML=vCircuito();
+  save();
+}
+</script>
+<script>
+/* ================= VIEWS ================= */
+function vHoje(){
+  const f=focoAgora();
+  const feitasHoje=Object.values(S.feito||{}).filter(x=>x.dia===dataHoje).length;
+  let h='';
+  if(CLOUD.v>S.syncv) h+=`<div class="banner">🟢 Nova versão na nuvem (v${CLOUD.v})<button class="btn sm g" onclick="pullCloud()">🔄 ATUALIZAR</button></div>`;
+  h+=`<div class="insight"><div class="ilbl">💡 Insight do dia</div><div class="itxt">${esc(insHoje.t)}</div><div class="isrc">— ${esc(insHoje.s)} · <a href="#" onclick="trocaInsight();return false" style="color:var(--azul2);font-weight:700">outro insight →</a></div></div>`;
+  h+=`<div class="hero"><div class="lbl">🎯 Foco de agora</div>`;
+  if(f){
+    h+=`<div class="acao">${esc(f.t)}</div><div style="font-size:12.5px;opacity:.85;margin-bottom:12px">${esc(f.dev||'')}</div>
+    <div class="btnrow"><button class="btn p" onclick="focoFeito(${f.id})">✓ Feito</button><button class="btn s" onclick="go('demandas')">Ver fila</button><button class="btn s" onclick="pedirAjuda(${f.id})">Preciso de ajuda</button></div>`;
+  } else h+=`<div class="acao">Tudo em dia. Escolha uma frente ou descanse com paz.</div><div class="btnrow"><button class="btn p" onclick="go('demandas')">Ver demandas</button></div>`;
+  h+=`</div>`;
+  h+=`<div class="card"><h3>⚡ Despejo rápido <span class="tag">menor esforço</span></h3>
+  <div class="despejo"><textarea id="desp" placeholder="Escreva QUALQUER coisa: paguei X pro Y, ligar pro Z, ideia, preocupação... O Maestro classifica por você."></textarea><button class="btn g" onclick="despejar()">Despejar</button></div>
+  ${S.despejos&&S.despejos.length?`<div style="font-size:11.5px;color:var(--ink2)">Aguardando triagem do Maestro: ${S.despejos.length} despejo(s) — enviados automaticamente via circuito.</div>`:''}
+  </div>`;
+  h+=`<div class="grid2">`;
+  h+=`<div class="card"><h3>🧭 Reconstrução</h3>${CLOUD.frentes.map(fr=>`<div class="frente"><div class="fl"><span>${fr.n}</span><span>${fr.pct}%</span></div><div class="barra"><i style="width:${fr.pct}%;background:${fr.cor}"></i></div></div>`).join('')}</div>`;
+  h+=`<div class="card"><h3>🗓 Agora na rotina ${feitasHoje?`<span class="tag ok">${feitasHoje} feito(s) hoje</span>`:''}</h3><div class="rotina">${rotinaBlocoAtual()}</div></div>`;
+  h+=`</div>`;
+  if(S.inbox&&S.inbox.length) h+=`<div class="card"><h3>📬 Devolutivas do Maestro</h3>${S.inbox.slice(-4).reverse().map(m=>`<div class="msg"><div class="mh">${esc(m.h)}</div>${esc(m.t)}</div>`).join('')}</div>`;
+  return h;
+}
+function rotinaBlocoAtual(){
+  let h='';
+  rotinaHoje.forEach(([hr,txt],i)=>{
+    const prox=parseInt(hr.split(':')[0])>=horaAgora;
+    const sag=txt.includes('sagrado');
+    h+=`<div class="bl" style="${prox?'':'opacity:.45'}"><div class="hr ${sag?'sag':''}">${hr}</div><div>${sag?'<span class="sag">✝ </span>':''}${esc(txt.replace(' (sagrado)',''))}${i===0&&prox?'':''}</div></div>`;
+  });
+  return h;
+}
+function vDemandas(){
+  let h=`<div class="card"><h3>🎯 Fila única — tudo que existe <span class="tag">${CLOUD.demandas.filter(d=>d.status==='aberta'&&!S.feito[d.id]).length} abertas</span></h3>`;
+  const ord={P0:0,P1:1,P2:2,P3:3};
+  const lista=[...CLOUD.demandas].sort((a,b)=>(ord[a.p]-ord[b.p]));
+  lista.forEach(d=>{
+    const done=d.status==='feita'||S.feito[d.id];
+    h+=`<div class="item ${done?'done':''}"><button class="cb ${done?'done':''}" onclick="toggleDem(${d.id})">${done?'✓':''}</button>
+    <div class="tx"><div class="tt">${esc(d.t)}${d.recorrencia?' <span class="tag">🔁 '+esc(d.recorrencia)+'</span>':''}</div><div class="meta"><span class="tag ${d.p.toLowerCase()}">${d.p}</span><span class="tag area">${esc(d.area)}</span><span class="tag">${esc(d.tipo)}</span>📅 ${esc(d.prazo)} · ${esc(d.resp)}</div></div>
+    <button class="act" onclick="detDem(${d.id})">›</button></div>`;
+  });
+  h+=`</div>`;
+  return h;
+}
+function vFin(){
+  const f=CLOUD.financeiro;
+  const pos=f.lancs.reduce((s,l)=>s+(l.v>0?l.v:0),0);
+  const neg=f.lancs.reduce((s,l)=>s+(l.v<0?l.v:0),0);
+  let h=`<div class="card"><h3>💰 Conta corrente</h3><div class="saldo ${f.saldo>=0?'pos':'neg'}">R$ ${f.saldo.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div>
+  <div style="font-size:12px;color:var(--ink2);margin-top:4px">Entradas recentes: R$ ${pos.toLocaleString('pt-BR')} · Saídas: R$ ${Math.abs(neg).toLocaleString('pt-BR')}</div></div>`;
+  h+=`<div class="card"><h3>🧾 Últimos lançamentos</h3>${f.lancs.map(l=>`<div class="lanc"><div><div>${esc(l.t)}</div><div class="d">${esc(l.d)} · ${esc(l.cat)}</div></div><div class="v ${l.v<0?'neg':l.v>0?'pos':''}">${l.v===0?'—':(l.v<0?'−':'+')+' R$ '+Math.abs(l.v).toLocaleString('pt-BR',{minimumFractionDigits:2})}</div></div>`).join('')}</div>`;
+  h+=`<div class="card"><h3>➕ Lançar</h3><div class="despejo"><textarea id="lanctext" placeholder="Ex.: paguei 250 pro Otávio · recebi 1000 do marketplace"></textarea><button class="btn g" onclick="lancar()">Lançar</button></div><div style="font-size:11.5px;color:var(--ink2)">O Maestro registra, classifica e devolve confirmação no circuito.</div></div>`;
+  return h;
+}
+function vRotina(){
+  let h=`<div class="card"><h3>🗓 Rotina de hoje — ${DIASN[diaSem]} <span class="tag">05:30–09:00 sagrado</span></h3><div class="rotina">${rotinaBlocoAtual()}</div></div>`;
+  h+=`<div class="card"><h3>📅 Semana completa</h3>`;
+  DIAS.slice(1).concat(['dom']).forEach(d=>{
+    h+=`<details ${d===diaSem?'open':''} style="margin-bottom:6px"><summary style="font-weight:700;font-size:13px;cursor:pointer;padding:6px 0">${DIASN[d]}${d===diaSem?' · hoje':''}</summary><div class="rotina">${CLOUD.rotina[d].map(([hr,txt])=>`<div class="bl"><div class="hr ${txt.includes('sagrado')?'sag':''}">${hr}</div><div>${txt.includes('sagrado')?'<span class="sag">✝ </span>':''}${esc(txt.replace(' (sagrado)',''))}</div></div>`).join('')}</div></details>`;
+  });
+  h+=`</div>`;
+  return h;
+}
+function vPrincipios(){
+  let h=`<div class="card"><h3>⚖️ Princípios e valores — a base de toda decisão</h3>`;
+  CLOUD.principios.forEach((p,i)=>{
+    h+=`<div style="display:flex;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line)"><div style="width:30px;height:30px;border-radius:50%;background:var(--azul);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0">${i+1}</div><div><div style="font-weight:800;font-size:14.5px">${esc(p.n)}</div><div style="font-size:12.5px;color:var(--ink2);margin-top:2px;line-height:1.45">${esc(p.d)}</div></div></div>`;
+  });
+  h+=`</div>`;
+  h+=`<div class="card"><h3>🧠 Como o sistema decide</h3><div style="font-size:13px;line-height:1.6;color:var(--ink)">
+  Toda demanda é triada por: <b>princípio que serve</b> × <b>prazo real</b> × <b>risco de não fazer</b> × <b>valor de caixa</b> × <b>esforço</b>.<br><br>
+  O <b>Foco de Agora</b> mostra UMA ação por vez — a cognição fica livre para resolver, não para carregar.<br><br>
+  Inspirado em <i>PRINCÍPIOS</i> (Ray Dalio): princípios atualizáveis, decisões registradas, aprendizado composto.</div></div>`;
+  return h;
+}
+function vRegistros(){
+  let h=`<div class="card"><h3>📎 Registros e documentos</h3>
+  <div class="despejo"><textarea id="regtext" placeholder="Registre: conversa, documento, decisão, reflexão..."></textarea><button class="btn g" onclick="registrar()">Registrar</button></div>`;
+  if(S.reflexoes&&S.reflexoes.length){ h+=S.reflexoes.slice().reverse().map(r=>`<div class="msg"><div class="mh">${esc(r.h)}</div>${esc(r.t)}</div>`).join(''); }
+  else h+=`<div class="empty">Nada registrado ainda. Conversas, documentos e decisões vivem aqui — e no OneDrive.</div>`;
+  h+=`</div>`;
+  h+=`<div class="card"><h3>🗂 OneDrive — Sistema 4D</h3><div style="font-size:12.5px;color:var(--ink2);line-height:1.6">Entregas do Maestro em PDF: pasta <b>Sistema 4D</b> → <b>Entregas Maestro</b>.<br>Roteiro CRECI-SP e requerimento preenchido: pasta <b>Área de Trabalho/GABRIEL AQUINO/CRECI</b>.</div></div>`;
+  return h;
+}
+function vCircuito(){
+  let h=`<div class="card"><h3>🔁 Circuito com o Maestro</h3>
+  <div style="font-size:12.5px;color:var(--ink2);line-height:1.6;margin-bottom:10px">Toda ação sua (feito, despejo, lançamento) viaja sozinha ao Maestro pelo canal automático. As devolutivas dele chegam aqui e no chat.</div>`;
+  h+=`<div style="font-size:12px;font-weight:700;color:var(--ink2);margin-bottom:6px">ENVIADOS (${(S.outbox||[]).length} na fila)</div>`;
+  h+=(S.outbox&&S.outbox.length)?S.outbox.slice(-6).reverse().map(o=>`<div class="msg"><div class="mh">${esc(o.h)} · ${esc(o.source)}</div>${esc(o.text||JSON.stringify(o.actions||''))}</div>`).join(''):`<div class="empty">Fila vazia — tudo sincronizado ✓</div>`;
+  h+=`<div style="font-size:12px;font-weight:700;color:var(--ink2);margin:12px 0 6px">DEVOLUTIVAS</div>`;
+  h+=(S.inbox&&S.inbox.length)?S.inbox.slice().reverse().map(m=>`<div class="msg"><div class="mh">${esc(m.h)}</div>${esc(m.t)}</div>`).join(''):`<div class="empty">Sem devolutivas ainda.</div>`;
+  h+=`</div>`;
+  return h;
+}
+/* ================= AÇÕES ================= */
+function toggleDem(id){ const d=CLOUD.demandas.find(x=>x.id===id);
+ if(S.feito[id]){delete S.feito[id];}
+ else {S.feito[id]={dia:dataHoje,ts:Date.now()};
+   S.hist=S.hist||{}; (S.hist[id]=S.hist[id]||[]).push({h:agora(),ev:'feito',t:'Marcado como feito'});
+   if(d&&d.recorrencia){ const dias={'semanal':7,'quinzenal':15,'mensal':30,'diaria':1}[d.recorrencia]||7;
+     const nd=new Date(hoje.getTime()+dias*864e5);
+     const nprazo=String(nd.getDate()).padStart(2,'0')+'/'+String(nd.getMonth()+1).padStart(2,'0');
+     S.hist[id].push({h:agora(),ev:'recorrencia',t:'Próxima ocorrência agendada: '+nprazo});
+     alerta('Feito ✓ — próxima ocorrência: '+nprazo);
+   } else { alerta('Feito ✓ — registrado no histórico'); }
+ }
+ enfileira('acao',{actions:[{type:'demanda',id,done:!!S.feito[id]}]}); render(); }
+function focoFeito(id){ if(!S.feito[id]){ S.feito[id]={dia:dataHoje,ts:Date.now()};
+  S.hist=S.hist||{}; (S.hist[id]=S.hist[id]||[]).push({h:agora(),ev:'feito',t:'Marcado como feito (Foco de Agora)'});
+  const d=CLOUD.demandas.find(x=>x.id===id);
+  if(d&&d.recorrencia){ const dias={'semanal':7,'quinzenal':15,'mensal':30,'diaria':1}[d.recorrencia]||7;
+    const nd=new Date(hoje.getTime()+dias*864e5);
+    S.hist[id].push({h:agora(),ev:'recorrencia',t:'Próxima ocorrência agendada'});
+    alerta('Feito ✓ — recorrente, volta em '+dias+' dias');
+  } else alerta('Feito ✓ — registrado no histórico');
+ }
+ enfileira('acao',{actions:[{type:'demanda',id,done:!!S.feito[id]}]}); render(); }
+function pedirAjuda(id){ const d=CLOUD.demandas.find(x=>x.id===id); enfileira('ajuda',{text:'Preciso de ajuda com: '+d.t}); alerta('Pedido de ajuda enviado ao Maestro ✓'); render(); }
+function despejar(){ const t=$('desp').value.trim(); if(!t)return; S.despejos=S.despejos||[]; S.despejos.push({h:agora(),t}); enfileira('despejo',{text:t}); $('desp').value=''; alerta('Despejado ✓ — o Maestro classifica e devolve'); render(); }
+function lancar(){ const t=$('lanctext').value.trim(); if(!t)return; enfileira('lancamento',{text:t}); $('lanctext').value=''; alerta('Lançamento enviado ao Maestro ✓'); }
+function registrar(){ const t=$('regtext').value.trim(); if(!t)return; S.reflexoes=S.reflexoes||[]; S.reflexoes.push({h:agora(),t}); enfileira('registro',{text:t}); $('regtext').value=''; alerta('Registrado ✓'); render(); }
+function trocaInsight(){ const i=CLOUD.insights.indexOf(insHoje); const n=CLOUD.insights[(i+1)%CLOUD.insights.length]; $('view').querySelector('.itxt').textContent=n.t; $('view').querySelector('.isrc').firstChild.textContent='— '+n.s+' · '; }
+function agora(){ return dataHoje+' '+String(hoje.getHours()).padStart(2,'0')+':'+String(hoje.getMinutes()).padStart(2,'0'); }
+function alerta(t){ const d=document.createElement('div'); d.style.cssText='position:fixed;top:14px;left:50%;transform:translateX(-50%);background:#1b6e3c;color:#fff;padding:11px 18px;border-radius:12px;font-size:13.5px;font-weight:700;z-index:200;box-shadow:0 4px 14px rgba(0,0,0,.25)'; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
+function detDem(id){ const d=CLOUD.demandas.find(x=>x.id===id);
+ const h=(S.hist&&S.hist[id])||[]; const dc=(S.docs&&S.docs[id])||[]; const fb=(S.fb&&S.fb[id])||[];
+ $('mbox').innerHTML=`<h3>${esc(d.t)}</h3>
+<div class="pill"><span class="dot" style="background:var(--azul2)"></span>${esc(d.p)}</div><div class="pill"><span class="dot" style="background:var(--roxo)"></span>${esc(d.area)}</div><div class="pill"><span class="dot" style="background:var(--dourado)"></span>${esc(d.tipo)}</div><div class="pill"><span class="dot" style="background:var(--verde)"></span>📅 ${esc(d.prazo)} · resp: ${esc(d.resp)}</div>
+<label>Contexto e plano</label><div class="msg">${esc(d.dev||'—')}</div>
+<div style="display:flex;gap:6px;margin-top:14px;border-bottom:1px solid var(--line)">
+<button class="btn sm o" onclick="tabDet(${id},'hist')" id="tbh">📜 Histórico (${h.length})</button>
+<button class="btn sm o" onclick="tabDet(${id},'reg')" id="tbr">📝 Registro</button>
+<button class="btn sm o" onclick="tabDet(${id},'doc')" id="tbd">📎 Docs (${dc.length})</button>
+<button class="btn sm o" onclick="tabDet(${id},'fb')" id="tbf">💬 Feedback (${fb.length})</button>
+</div>
+<div id="detbody" style="margin-top:12px"></div>
+<div class="mrow"><button class="btn g" onclick="focoFeito(${d.id});fecharModal()">✓ Marcar feito</button><button class="btn o" onclick="fecharModal()">Fechar</button></div>`;
+ $('modal').classList.add('open'); tabDet(id,'hist'); }
+function tabDet(id,tab){
+ const d=CLOUD.demandas.find(x=>x.id===id);
+ const h=(S.hist&&S.hist[id])||[]; const dc=(S.docs&&S.docs[id])||[]; const fb=(S.fb&&S.fb[id])||[];
+ const b=$('detbody');
+ if(tab==='hist'){
+  let hh=h.length?h.slice().reverse().map(x=>`<div class="msg"><div class="mh">${esc(x.h)} · ${esc(x.ev)}</div>${esc(x.t)}</div>`).join(''):'<div class="empty">Sem histórico ainda. Cada "feito", registro e feedback vira linha aqui — memória para decisões futuras.</div>';
+  hh+=`<div style="font-size:11.5px;color:var(--ink2);margin-top:10px">Feitas: ${h.filter(x=>x.ev==='feito').length} · Recorrência: ${d.recorrencia||'—'}</div>`;
+  b.innerHTML=hh;
+ } else if(tab==='reg'){
+  b.innerHTML=`<textarea id="detreg" rows="3" style="width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px;font-size:13.5px;font-family:inherit;background:var(--bg);color:var(--ink)" placeholder="Registre o que aconteceu nesta demanda: conversa, decisão, resultado..."></textarea><div class="mrow" style="margin-top:8px"><button class="btn g sm" onclick="detReg(${id})">Salvar registro</button></div>${h.filter(x=>x.ev==='registro').slice().reverse().map(x=>`<div class="msg" style="margin-top:8px"><div class="mh">${esc(x.h)}</div>${esc(x.t)}</div>`).join('')}`;
+ } else if(tab==='doc'){
+  b.innerHTML=`<textarea id="detdoc" rows="2" style="width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px;font-size:13.5px;font-family:inherit;background:var(--bg);color:var(--ink)" placeholder="Cole link do documento (OneDrive) ou descreva o anexo..."></textarea><div class="mrow" style="margin-top:8px"><button class="btn g sm" onclick="detDoc(${id})">Vincular documento</button></div>${dc.slice().reverse().map(x=>`<div class="msg" style="margin-top:8px"><div class="mh">${esc(x.h)} · 📎</div>${esc(x.t)}</div>`).join('')}`;
+ } else if(tab==='fb'){
+  b.innerHTML=`<textarea id="detfb" rows="3" style="width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px;font-size:13.5px;font-family:inherit;background:var(--bg);color:var(--ink)" placeholder="Feedback: o que resultou? o que travou? o Maestro usa isso para decidir se cria tarefa nova."></textarea><div class="mrow" style="margin-top:8px"><button class="btn g sm" onclick="detFb(${id})">Enviar feedback</button></div>${fb.slice().reverse().map(x=>`<div class="msg" style="margin-top:8px"><div class="mh">${esc(x.h)} · 💬</div>${esc(x.t)}</div>`).join('')}`;
+ }
+}
+function detReg(id){ const t=$('detreg').value.trim(); if(!t)return;
+ S.hist=S.hist||{}; (S.hist[id]=S.hist[id]||[]).push({h:agora(),ev:'registro',t});
+ enfileira('registro',{text:'[demanda #'+id+'] '+t}); alerta('Registro salvo ✓ — vai para o histórico'); detDem(id); }
+function detDoc(id){ const t=$('detdoc').value.trim(); if(!t)return;
+ S.docs=S.docs||{}; (S.docs[id]=S.docs[id]||[]).push({h:agora(),t});
+ S.hist=S.hist||{}; (S.hist[id]=S.hist[id]||[]).push({h:agora(),ev:'documento',t});
+ enfileira('documento',{text:'[demanda #'+id+'] doc: '+t}); alerta('Documento vinculado ✓'); detDem(id); }
+function detFb(id){ const t=$('detfb').value.trim(); if(!t)return;
+ S.fb=S.fb||{}; (S.fb[id]=S.fb[id]||[]).push({h:agora(),t});
+ S.hist=S.hist||{}; (S.hist[id]=S.hist[id]||[]).push({h:agora(),ev:'feedback',t});
+ enfileira('feedback',{text:'[demanda #'+id+'] feedback: '+t}); alerta('Feedback enviado ✓ — o Maestro avalia e devolve'); detDem(id); }
+/* ================= CIRCUITO (webhook automático) ================= */
+const WEBHOOK='https://maestro.adapta.one/webhooks/generic/9a746a69d6672d60dd9e3630bc69c668e303e6f4074c048b43ff5507cf92f7fe';
+const SECRET='6cc7ad6014a9f715d57a4a9c1640ac921edb1704250293aced92ff1adf358d38';
+function enfileira(source,payload){
+  S.outbox=S.outbox||[];
+  S.outbox.push(Object.assign({h:agora(),source,device:'web'},payload));
+  save(); flush();
+}
+function flush(){
+  if(!(S.outbox&&S.outbox.length)) return;
+  const item=S.outbox[0];
+  const body=JSON.stringify({source:item.source,device:item.device,ts:item.h,text:item.text||'',actions:item.actions||[],stats:{pend:CLOUD.demandas.filter(d=>d.status==='aberta'&&!S.feito[d.id]).length,saldo:CLOUD.financeiro.saldo}});
+  try{
+    fetch(WEBHOOK,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:body+String.fromCharCode(10)+'secret:'+SECRET})
+    .then(()=>{S.outbox.shift();save();if(S.outbox.length)setTimeout(flush,800);else if(aba==='circuito')render();})
+    .catch(()=>{});
+  }catch(e){}
+}
+function pullCloud(){ S.syncv=CLOUD.v; save(); alerta('Atualizado para v'+CLOUD.v+' ✓'); render(); }
+/* ================= INIT ================= */
+$('btndark').onclick=()=>{S.dark=!S.dark;document.body.classList.toggle('dark',S.dark);save();};
+document.body.classList.toggle('dark',!!S.dark);
+$('fab').onclick=()=>{ $('mbox').innerHTML=`<h3>＋ Nova demanda</h3>
+<label>O que precisa ser feito?</label><textarea id="nt" rows="2" placeholder="Ex.: ligar pro BRA sobre PROSCI"></textarea>
+<label>Prioridade</label><select id="np"><option>P0 — hoje/amanhã</option><option>P1 — esta semana</option><option>P2 — 2 semanas</option><option>P3 — quando couber</option></select>
+<label>Área</label><select id="na"><option>trabalho</option><option>financeiro</option><option>familiar</option><option>juridico</option><option>social</option><option>saude</option><option>espiritual</option></select>
+<div class="mrow"><button class="btn g" onclick="novaDem()">Criar</button><button class="btn o" onclick="fecharModal()">Cancelar</button></div>`;
+ $('modal').classList.add('open'); };
+function novaDem(){ const t=$('nt').value.trim(); if(!t)return; const p=$('np').value.split(' ')[0];
+ CLOUD.demandas.unshift({id:Date.now(),t,tipo:'tarefa',area:$('na').value,p,prazo:'—',status:'aberta',resp:'Gabriel',dev:'Criada por você no app'});
+ enfileira('nova',{text:t}); fecharModal(); alerta('Demanda criada ✓ — Maestro notificado'); render(); }
+$('modal').addEventListener('click',e=>{if(e.target.id==='modal')fecharModal();});
+renderNav(); render(); flush();
+</script>
 </body>
 </html>
