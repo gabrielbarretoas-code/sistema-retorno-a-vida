@@ -81,6 +81,6 @@
   });
  };
  document.addEventListener('click',e=>{if(dirtyContext&&e.target.closest('a[href^="#"],button[data-open],button[data-note],button[data-note-edit],button#new')){e.preventDefault();e.stopImmediatePropagation();toast('Salve a informação deste contexto antes de trocar de área.');}},true);
- window.RetornoContext={balance,fields,reportText};if(ready)render();
+ window.RetornoContext={balance,fields,reportText,canNavigate:()=>{if(dirtyContext){toast('Salve a informação deste contexto antes de trocar de assunto.');return false;}return true;}};if(ready)render();
 })();
 
