@@ -134,7 +134,7 @@
   }
   async function persistRecord(id,kind,patch,event,expectedRevision=0){
     const {record:old}=await api('records?id='+encodeURIComponent(id));
-    if(event&&old?.data.events?.some(e=>e.id===event.id)){await refresh();return old;}
+    if(event&&old?.data.events?.some(e=>e.id===event.id)){if(Object.keys(patch).some(k=>JSON.stringify(old.data[k])!==JSON.stringify(patch[k])))throw Error('A tentativa anterior foi gravada, mas seu texto mudou. Atualize e compare antes de salvar novamente.');await refresh();return old;}
     if((old?.revision||0)!==expectedRevision)throw Error('Este registro mudou em outro acesso. Seu texto foi preservado aqui; atualize e compare antes de salvar.');
     const data={...(old?.data||{}),...patch};
     if(event)data.events=[...(old?.data.events||[]),event];
@@ -148,15 +148,15 @@
   async function saveMemo(t,patch,entry){
     const id=memo(t)?.id||await recordId(t.id);
     const shown=memo(t),previous=shown?.data||{};
-    if(patch.action){const fresh=await latestTask(t.id);if(fresh.updatedAt!==t.updatedAt)throw Error('O contexto deste assunto mudou. Atualize e revise a orientação antes de salvar o plano.');}
+    if(patch.action){const fresh=await latestTask(t.id,t.updatedAt);if(fresh.updatedAt!==t.updatedAt)throw Error('O contexto deste assunto mudou. Atualize e revise a orientação antes de salvar o plano.');}
     const data={category:'mentor-plan',taskId:t.id,title:'Plano · '+t.title,...patch};
     if(patch.action)data.taskUpdatedAt=t.updatedAt;
     data.text=[data.outcome||previous.outcome,data.action||previous.action,data.why||previous.why].filter(Boolean).join('\n\n');
     const confirmed=await persistRecord(id,'note',data,entry,shown?.revision||0);for(const [key,value] of pendingEvents)if(value.id===entry?.id)pendingEvents.delete(key);return confirmed;
   }
-  async function latestTask(id){
+  async function latestTask(id,expectedUpdatedAt){
     const fresh=await api('tasks'),t=fresh.tasks.find(t=>t.id===id);
-    if(!t)throw Error('O assunto não está mais disponível. Atualize a página.');return t;
+    if(!t)throw Error('O assunto não está mais disponível. Atualize a página.');if(expectedUpdatedAt&&t.updatedAt!==expectedUpdatedAt)throw Error('O assunto mudou em outro acesso. Seu texto foi preservado; atualize e revise antes de salvar.');return t;
   }
   const legacyEditTask=editTask,legacyAgenda=agenda,legacyBind=bind;
   editTask=function(id,type='tarefa'){
@@ -178,21 +178,23 @@
     const canLeave=()=>{if(dirty){toast('Salve o plano ou a memória antes de trocar de área.');return false;}return true;};
     $('mentor-back').onclick=()=>{if(canLeave()){caseId=null;render();}};
     $('mentor-details').onclick=()=>{if(!canLeave())return;caseId=null;legacyEditTask(t.id);const top=document.querySelector('.execution-top');if(top){const b=document.createElement('button');b.type='button';b.textContent='Voltar à orientação';b.onclick=()=>{if($('workspace-save-state')?.classList.contains('unsaved'))return toast('Salve o andamento antes de voltar.');editTask(t.id);};top.append(b);}};
-    $('mentor-plan-form').oninput=()=>{dirty=true;dirtySection='plan';};
-    $('mentor-memory-form').oninput=()=>{dirty=true;dirtySection='memory';};
+    const markDirty=section=>{dirty=true;dirtySection=section;for(const [name,id] of [['plan','mentor-plan-form'],['memory','mentor-memory-form'],['proof','mentor-proof-form']])if($(id))for(const field of $(id).elements)field.disabled=name!==section;$('mentor-draft').disabled=section!=='draft';};
+    $('mentor-plan-form').oninput=()=>markDirty('plan');
+    $('mentor-memory-form').oninput=()=>markDirty('memory');
+    if($('mentor-proof-form'))$('mentor-proof-form').oninput=()=>markDirty('proof');
     const canWrite=section=>{if(dirty&&dirtySection!==section){toast('Salve primeiro o texto que está em edição.');return false;}return true;};
     const guarded=async(button,errorId,fn)=>{button.disabled=true;try{await fn();dirty=false;const current=tasks.find(x=>x.id===t.id);if(current)openCase(current);toast('Gravado e conferido no cofre privado.');}catch(error){const box=$(errorId);if(box)box.textContent=error.message;button.disabled=false;}};
     $('mentor-plan-form').onsubmit=e=>{e.preventDefault();if(!canWrite('plan'))return;const disposition=$('mentor-disposition').value,nextAt=$('mentor-next-at').value;if(disposition==='later'&&!nextAt){$('mentor-plan-error').textContent='Defina quando reavaliar para adiar com critério.';return;}const patch={outcome:$('mentor-outcome').value.trim(),action:$('mentor-action').value.trim(),why:$('mentor-why').value.trim(),disposition,medium:$('mentor-medium').value,nextAt:nextAt?iso(nextAt):null};if(!patch.outcome||!patch.action||!patch.why){$('mentor-plan-error').textContent='Preencha resultado, ação e fundamento.';return;}guarded(e.submitter,'mentor-plan-error',()=>saveMemo(t,patch,event('plano','Plano escolhido: '+patch.action+' · Fundamento: '+patch.why)));};
     $('mentor-memory-form').onsubmit=e=>{e.preventDefault();if(!canWrite('memory'))return;if(!$('mentor-entry').value.trim())return;guarded(e.submitter,'mentor-memory-error',()=>saveMemo(t,{},event($('mentor-entry-type').value,$('mentor-entry').value.trim())));};
-    $('mentor-prepare').onclick=()=>{$('mentor-draft-box').hidden=false;if(!$('mentor-draft').value)$('mentor-draft').value='Gostaria de confirmar o andamento deste assunto: '+t.title+'. '+(a.question||'Qual é o próximo passo e o retorno esperado?');$('mentor-draft').focus();};
-    $('mentor-draft').oninput=()=>{dirty=true;dirtySection='draft';};
+    $('mentor-prepare').onclick=()=>{if(!canLeave())return;$('mentor-draft-box').hidden=false;if(!$('mentor-draft').value)$('mentor-draft').value='Gostaria de confirmar o andamento deste assunto: '+t.title+'. '+(a.question||'Qual é o próximo passo e o retorno esperado?');$('mentor-draft').focus();};
+    $('mentor-draft').oninput=()=>markDirty('draft');
     $('mentor-draft-save').onclick=e=>{if(!canWrite('draft'))return;guarded(e.currentTarget,'mentor-tool-error',()=>saveMemo(t,{draft:$('mentor-draft').value},event('preparacao','Texto preparado e guardado; nenhum envio realizado.')));};
     $('mentor-copy').onclick=async()=>{try{await navigator.clipboard.writeText($('mentor-draft').value);toast('Texto copiado. Nenhuma mensagem foi enviada.');}catch{$('mentor-draft').select();toast('Selecione e copie o texto preparado.');}};
     $('mentor-automation').onclick=e=>{if(!canLeave())return;guarded(e.currentTarget,'mentor-tool-error',()=>saveMemo(t,{},event('automacao-proposta',a.automation+' Possibilidade registrada para avaliação no projeto; nenhuma automação criada.')));};
     if($('mentor-ics'))$('mentor-ics').onclick=()=>ics({...t,title:saved.action||t.title,context:saved.why||t.context,schedule:{start:saved.nextAt}});
-    if($('mentor-adopt-steps'))$('mentor-adopt-steps').onclick=e=>{if(!canLeave())return;guarded(e.currentTarget,'mentor-check-error',async()=>{const fresh=await latestTask(t.id);if(closed(fresh))throw Error('Este assunto foi encerrado em outro acesso.');if(fresh.checklist?.length)throw Error('Já existe um checklist. Atualize para preservar seus passos.');await saveTask({...fresh,checklist:a.steps.map(text=>({id:uid('passo'),text,done:false}))});});};
-    document.querySelectorAll('[data-mentor-step]').forEach(box=>box.onchange=()=>{if(!canLeave()){box.checked=!box.checked;return;}guarded(box,'mentor-check-error',async()=>{const fresh=await latestTask(t.id),i=Number(box.dataset.mentorStep);if(closed(fresh))throw Error('Este assunto foi encerrado em outro acesso.');if(fresh.checklist?.[i]?.id!==t.checklist[i]?.id||fresh.checklist?.[i]?.text!==t.checklist[i]?.text)throw Error('O checklist mudou. Atualize antes de marcar.');await saveTask({...fresh,checklist:fresh.checklist.map((s,n)=>n===i?{...s,done:box.checked}:s)});});});
-    if($('mentor-proof-form'))$('mentor-proof-form').onsubmit=e=>{e.preventDefault();if(!canWrite('proof'))return;const proof=$('mentor-proof').value.trim();if(proof.length<10)return;guarded(e.submitter,'mentor-proof-error',async()=>{const fresh=await latestTask(t.id);if(closed(fresh))throw Error('Este assunto já foi encerrado em outro acesso.');await saveTask({...fresh,status:'concluida',feedback:[...(fresh.feedback||[]),{date:new Date().toISOString(),text:'Evidência de conclusão: '+proof}]});});};
+    if($('mentor-adopt-steps'))$('mentor-adopt-steps').onclick=e=>{if(!canLeave())return;guarded(e.currentTarget,'mentor-check-error',async()=>{const fresh=await latestTask(t.id,t.updatedAt);if(closed(fresh))throw Error('Este assunto foi encerrado em outro acesso.');if(fresh.checklist?.length)throw Error('Já existe um checklist. Atualize para preservar seus passos.');await saveTask({...fresh,checklist:a.steps.map(text=>({id:uid('passo'),text,done:false}))});});};
+    document.querySelectorAll('[data-mentor-step]').forEach(box=>box.onchange=()=>{if(!canLeave()){box.checked=!box.checked;return;}guarded(box,'mentor-check-error',async()=>{const fresh=await latestTask(t.id,t.updatedAt),i=Number(box.dataset.mentorStep);if(closed(fresh))throw Error('Este assunto foi encerrado em outro acesso.');if(fresh.checklist?.[i]?.id!==t.checklist[i]?.id||fresh.checklist?.[i]?.text!==t.checklist[i]?.text)throw Error('O checklist mudou. Atualize antes de marcar.');await saveTask({...fresh,checklist:fresh.checklist.map((s,n)=>n===i?{...s,done:box.checked}:s)});});});
+    if($('mentor-proof-form'))$('mentor-proof-form').onsubmit=e=>{e.preventDefault();if(!canWrite('proof'))return;const proof=$('mentor-proof').value.trim();if(proof.length<10)return;guarded(e.submitter,'mentor-proof-error',async()=>{const fresh=await latestTask(t.id,t.updatedAt);if(closed(fresh))throw Error('Este assunto já foi encerrado em outro acesso.');await saveTask({...fresh,status:'concluida',feedback:[...(fresh.feedback||[]),{date:new Date().toISOString(),text:'Evidência de conclusão: '+proof}]});});};
   }
   agenda=function(){
     const planned=records.filter(r=>r.data?.category==='mentor-plan'&&validDate(r.data.nextAt)&&tasks.some(t=>t.id===r.data.taskId&&!closed(t))).sort((a,b)=>a.data.nextAt.localeCompare(b.data.nextAt));
