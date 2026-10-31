@@ -25,7 +25,12 @@
   }
   const contextFields=['id','title','area','status','context','nextStep','uncertainties','due','schedule','responsible','sources','documents','links','feedback'];
   const canonical=value=>value===null||typeof value!=='object'?JSON.stringify(value):Array.isArray(value)?'['+value.map(canonical).join(',')+']':'{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+canonical(value[k])).join(',')+'}';
-  const contextFingerprint=t=>'sha256:'+sha256(canonical(Object.fromEntries(contextFields.map(k=>[k,t[k]??null]))));
+  const contextCases=t=>records.filter(r=>r.kind==='note'&&r.data?.category==='contextual-case-report'&&(r.data.case?.taskIds||[]).includes(t.id)).sort((a,b)=>a.id.localeCompare(b.id));
+  function contextFingerprint(t){
+    const payload=Object.fromEntries(contextFields.map(k=>[k,t[k]??null])),cases=contextCases(t);
+    if(cases.length)payload.contextualCaseSources=cases.map(r=>({id:r.id,...Object.fromEntries(['person','fields','case','paymentEvents','claims','documents','contextUpdates','sources','distinctions','audioAnalysisRecordIds'].map(k=>[k,r.data[k]??null])),analyses:records.filter(a=>(r.data.audioAnalysisRecordIds||[]).includes(a.id)).sort((a,b)=>a.id.localeCompare(b.id)).map(a=>({id:a.id,mediaSha256:a.data.mediaSha256??null,machineTranscription:a.data.machineTranscription??null,reviewedTranscript:a.data.reviewedTranscript??null}))}));
+    return 'sha256:'+sha256(canonical(payload));
+  }
 
   function analyze(t,p={},saved={},now=new Date()){
     const words=normalize([t.title,t.context,t.nextStep,t.type].join(' '));
@@ -95,6 +100,8 @@
     if(!expired&&choice.action)action=choice.action;
     if(choice.outcome)outcome=choice.outcome;
     if(choice.medium)medium=choice.medium;
+    const contextReviewPending=!closed(t)&&contextCases(t).length>0&&!interpreted&&!(choice.action&&planCurrent);
+    if(contextReviewPending){lane='review';label='Revisão do contexto pela IA';action='A IA precisa conciliar as informações deste contexto antes de orientar uma nova ação.';question='';steps=['Aguardar a revisão das fontes já disponíveis pela IA'];why.unshift('Há um contexto relacionado que ainda não foi conciliado nesta orientação.');}
     const effort=p.energy==='baixa'?10:Number(p.minutes)||15;
     let score=(t.priority===1?25:t.priority===2?12:3)+(personal(t)?8:0)+(p.focusArea===t.area?18:0);
     if(due&&due>now)score+=Math.max(0,20-Math.ceil((due-now)/86400000)*3);
@@ -104,7 +111,7 @@
     if(interpreted)score+=Math.min(25,Math.max(0,Number(interpretation.attention)||0));
     return {lane,label,why,action,outcome,question,medium,steps,financial,expired,score,effort,
       interpretationState:interpretation?(interpreted?'Interpretação disponível · falta evidência do resultado':'Contexto mudou · interpretação anterior precisa de revisão'):'Sem interpretação individual · roteiro inicial por regras',
-      interpretation:interpreted?interpretation:null,planCurrent,
+      interpretation:interpreted?interpretation:null,planCurrent,contextReviewPending,
       automation:interpreted&&interpretation.automation?interpretation.automation:financial?'Leitura, organização e preparação podem ser assistidas no projeto. Pagamento exige decisão e execução autorizadas.':
       t.status==='aguardando'?'Acompanhamento pode ser preparado; nenhum lembrete ou cobrança externa é ativado por esta tela.':
       'Triagem e preparação podem ser assistidas pelos conectores do projeto. Esta tela não executa mensagens ou integrações externas.'};
@@ -124,7 +131,7 @@
     if(closed(t))return null;
     const reply=(t.feedback||[]).filter(f=>f.kind==='context-update').at(-1);
     const sourceDates=[...(t.sources||[]).map(s=>s.date),...(t.feedback||[]).map(f=>f.date)].filter(validDate).sort((a,b)=>date(a)-date(b));
-    const missing=a.expired||t.status==='aguardando'||t.status==='proposta'||!!String(t.uncertainties||'').trim()||!t.context||!sourceDates.length||(memo(t)?.data.interpretation&&!a.interpretation);
+    const missing=a.contextReviewPending||a.expired||t.status==='aguardando'||t.status==='proposta'||!!String(t.uncertainties||'').trim()||!t.context||!sourceDates.length||(memo(t)?.data.interpretation&&!a.interpretation);
     if(!missing)return null;
     const pending=!!reply&&!a.interpretation,futureWaiting=t.status==='aguardando'&&validDate(t.due)&&date(t.due)>new Date();
     const question=futureWaiting?'Acompanhamento previsto para '+displayDate(t.due)+'. Há algum fato novo que altere o retorno ou a entrega?':a.interpretation?.question||(a.expired?'O compromisso '+short(t.title,100)+' foi realizado? Qual desfecho ou novo horário foi confirmado?':t.status==='aguardando'?'Sobre '+short(t.title,100)+': o retorno ou a entrega já aconteceu? O que ainda depende de outra pessoa?':t.status==='proposta'?'Qual documento ou retorno no canal oficial confirma '+short(t.title,110)+'?':'O próximo passo “'+short(t.nextStep||t.title,140)+'” já foi realizado? Qual resultado ou dependência ficou registrado?');
@@ -240,4 +247,5 @@
   window.RetornoMentor={analyze,protectedMorning,safeHref,ranked,contextAlert,contextFingerprint,sha256};
   if(ready)render();
 })();
+
 
